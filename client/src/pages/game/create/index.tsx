@@ -1,12 +1,15 @@
 import { useFormik } from "formik";
 import { useState } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { FieldNameConstants } from "../../../app/constants/field-name.constants";
 import { useApp } from "../../../app/contexts/app/hooks/app.hook";
 import { GameRoom } from "../../../app/entities/game-room.entity";
 import { Events } from "../../../app/enums/event.enum";
+import { AppRoutes } from "../../../app/enums/route.enum";
 import useSocket from "../../../app/hooks/socket.hook";
 import { PrimaryButton } from "../../../components/buttons/primary";
+import { Card } from "../../../components/card";
 import { TextInput } from "../../../components/formulary/inputs/text";
 import { Header } from "../../../components/header";
 import { CreateGameValidationSchema } from "./schema.yup";
@@ -17,6 +20,7 @@ export function CreateGamePage(): JSX.Element {
 
   const { state: appState } = useApp();
   const socket = useSocket();
+  const navigate: NavigateFunction = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -41,8 +45,6 @@ export function CreateGamePage(): JSX.Element {
           password: password,
         };
 
-        console.log("payload", payload);
-
         socket.emit(Events.CreateGame, payload);
 
         setGameRoom(payload);
@@ -54,11 +56,21 @@ export function CreateGamePage(): JSX.Element {
 
   return (
     <>
+      <Header title={gameRoom ? "Your game" : "Create game"} />
+
       {gameRoom ? (
-        <div>
-          <p>Room name: {gameRoom.roomName}</p>
-          <p>Password: {gameRoom.password}</p>
-        </div>
+        <Card
+          title={gameRoom.tip}
+          subtitle={gameRoom.password}
+          onClick={() =>
+            navigate(AppRoutes.PlayGame, {
+              state: {
+                room: gameRoom.roomName,
+                password: gameRoom.password,
+              },
+            })
+          }
+        />
       ) : (
         <form
           className="w-full"
@@ -67,8 +79,6 @@ export function CreateGamePage(): JSX.Element {
           noValidate
         >
           <div className="flex flex-wrap -mx-3 mb-6">
-            <Header title={"Secret word"} />
-
             <TextInput
               id={FieldNameConstants.SECRET_WORD}
               name={FieldNameConstants.SECRET_WORD}
