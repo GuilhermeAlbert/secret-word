@@ -40,21 +40,19 @@ export function ListGamesPage(): JSX.Element {
           <div className="container mx-auto">
             <div className="grid grid-cols-1 gap-4">
               {gameRooms.map((gameRoom, index) => (
-                <div className="item">
-                  <Card
-                    key={index}
-                    title={gameRoom.tip}
-                    subtitle={gameRoom.password}
-                    onClick={() =>
-                      navigate(AppRoutes.PlayGame, {
-                        state: {
-                          room: gameRoom.roomName,
-                          password: gameRoom.password,
-                        },
-                      })
-                    }
-                  />
-                </div>
+                <Card
+                  key={index}
+                  title={gameRoom.tip}
+                  subtitle={gameRoom.roomName}
+                  onClick={() =>
+                    navigate(AppRoutes.PlayGame, {
+                      state: {
+                        room: gameRoom.roomName,
+                        tip: gameRoom.tip,
+                      },
+                    })
+                  }
+                />
               ))}
             </div>
           </div>

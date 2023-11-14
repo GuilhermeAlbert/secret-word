@@ -1,4 +1,4 @@
-import { FieldNames } from "../../../app/enums/field-name.enum";
+import { FieldNames } from "../enums/field-name.enum";
 
 export interface PlayFormData {
   [FieldNames.GUESS]: string;

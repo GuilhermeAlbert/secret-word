@@ -5,4 +5,6 @@ export enum Events {
   RoomsListUpdated = "rooms_list_updated",
   RequestUserRooms = "request_user_rooms",
   UserRoomsList = "user_rooms_list",
+  SubmitGuess = "submit_guess",
+  GuessFeedback = "guess_feedback",
 }

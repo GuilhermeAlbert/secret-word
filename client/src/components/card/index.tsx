@@ -1,3 +1,4 @@
+import { Badge } from "../badge";
 import { PrimaryButton } from "../buttons/primary";
 import { CardProps } from "./types";
 
@@ -6,16 +7,14 @@ export function Card({ title, subtitle, onClick }: CardProps): JSX.Element {
     <div className="p-6 bg-gray-200 border border-black rounded-lg shadow">
       <a href="#">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-          Room: {title}
+          Tip: {title}
         </h5>
       </a>
 
       <div className="mt-5 mb-5">
-        <p className="font-normal text-gray-700">Password:</p>
+        <p className="font-normal text-gray-700">Room:</p>
 
-        <span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
-          {subtitle}
-        </span>
+        <Badge title={subtitle} />
       </div>
 
       <div className="flex flex-wrap">

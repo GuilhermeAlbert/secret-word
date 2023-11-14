@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { FieldNameConstants } from "../../../app/constants/field-name.constants";
+import { FieldNames } from "../../../app/enums/field-name.enum";
 import { useApp } from "../../../app/contexts/app/hooks/app.hook";
 import { GameRoom } from "../../../app/entities/game-room.entity";
 import { Events } from "../../../app/enums/event.enum";
@@ -24,8 +24,8 @@ export function CreateGamePage(): JSX.Element {
 
   const formik = useFormik({
     initialValues: {
-      [FieldNameConstants.SECRET_WORD]: "",
-      [FieldNameConstants.TIP]: "",
+      [FieldNames.SECRET_WORD]: "",
+      [FieldNames.TIP]: "",
     },
     validationSchema: CreateGameValidationSchema,
     onSubmit: handleSubmit,
@@ -34,7 +34,6 @@ export function CreateGamePage(): JSX.Element {
   async function handleSubmit(data: CreateGameFormData): Promise<void> {
     try {
       const roomName = uuidv4();
-      const password = uuidv4();
 
       if (socket && appState.userIdentifier) {
         const payload: GameRoom = {
@@ -42,7 +41,6 @@ export function CreateGamePage(): JSX.Element {
           secretWord: data.secret_word,
           tip: data.tip,
           roomName: roomName,
-          password: password,
         };
 
         socket.emit(Events.CreateGame, payload);
@@ -61,12 +59,12 @@ export function CreateGamePage(): JSX.Element {
       {gameRoom ? (
         <Card
           title={gameRoom.tip}
-          subtitle={gameRoom.password}
+          subtitle={gameRoom.roomName}
           onClick={() =>
             navigate(AppRoutes.PlayGame, {
               state: {
                 room: gameRoom.roomName,
-                password: gameRoom.password,
+                tip: gameRoom.tip,
               },
             })
           }
@@ -80,25 +78,25 @@ export function CreateGamePage(): JSX.Element {
         >
           <div className="flex flex-wrap -mx-3 mb-6">
             <TextInput
-              id={FieldNameConstants.SECRET_WORD}
-              name={FieldNameConstants.SECRET_WORD}
+              id={FieldNames.SECRET_WORD}
+              name={FieldNames.SECRET_WORD}
               label={"Secret word"}
               placeholder={"Type your secret word"}
-              value={formik.values[FieldNameConstants.SECRET_WORD]}
+              value={formik.values[FieldNames.SECRET_WORD]}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.errors[FieldNameConstants.SECRET_WORD]}
+              error={formik.errors[FieldNames.SECRET_WORD]}
             />
 
             <TextInput
-              id={FieldNameConstants.TIP}
-              name={FieldNameConstants.TIP}
+              id={FieldNames.TIP}
+              name={FieldNames.TIP}
               label={"Tip"}
               placeholder={"Type the tip"}
-              value={formik.values[FieldNameConstants.TIP]}
+              value={formik.values[FieldNames.TIP]}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.errors[FieldNameConstants.TIP]}
+              error={formik.errors[FieldNames.TIP]}
             />
           </div>
 

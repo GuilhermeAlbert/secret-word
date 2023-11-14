@@ -8,8 +8,6 @@ export function handleUserRoomsRequest(socket: Socket) {
       (room) => room.userId === userId
     );
 
-    console.log(userRooms);
-
     socket.emit(Events.UserRoomsList, userRooms);
   });
 }

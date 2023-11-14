@@ -1,6 +1,6 @@
-import { FieldNameConstants } from "../../../app/constants/field-name.constants";
+import { FieldNames } from "../../../app/enums/field-name.enum";
 
 export interface CreateGameFormData {
-  [FieldNameConstants.SECRET_WORD]: string;
-  [FieldNameConstants.TIP]: string;
+  [FieldNames.SECRET_WORD]: string;
+  [FieldNames.TIP]: string;
 }
