@@ -2,7 +2,8 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { FieldNameConstants } from "../../../app/constants/field-name.constants";
-import { GameRoom } from "../../../app/entities/game-room";
+import { useApp } from "../../../app/contexts/app/hooks/app.hook";
+import { GameRoom } from "../../../app/entities/game-room.entity";
 import { Events } from "../../../app/enums/event.enum";
 import useSocket from "../../../app/hooks/socket.hook";
 import { PrimaryButton } from "../../../components/buttons/primary";
@@ -14,6 +15,7 @@ import { CreateGameFormData } from "./types";
 export function CreateGamePage(): JSX.Element {
   const [gameRoom, setGameRoom] = useState<GameRoom>();
 
+  const { state: appState } = useApp();
   const socket = useSocket();
 
   const formik = useFormik({
@@ -30,13 +32,16 @@ export function CreateGamePage(): JSX.Element {
       const roomName = uuidv4();
       const password = uuidv4();
 
-      if (socket) {
+      if (socket && appState.userIdentifier) {
         const payload: GameRoom = {
+          userId: appState.userIdentifier,
           secretWord: data.secret_word,
           tip: data.tip,
           roomName: roomName,
           password: password,
         };
+
+        console.log("payload", payload);
 
         socket.emit(Events.CreateGame, payload);
 
@@ -56,7 +61,7 @@ export function CreateGamePage(): JSX.Element {
         </div>
       ) : (
         <form
-          className="w-full max-w-lg"
+          className="w-full"
           autoComplete="off"
           onSubmit={formik.handleSubmit}
           noValidate

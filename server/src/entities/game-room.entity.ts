@@ -3,4 +3,5 @@ export type GameRoom = {
   password: string;
   secretWord: string;
   tip: string;
+  userId: string;
 };

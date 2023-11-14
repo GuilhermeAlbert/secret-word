@@ -1,20 +1,12 @@
 import { Socket } from "socket.io";
-import { GameRoom } from "../entities/game-room";
+import { GameRoom } from "../entities/game-room.entity";
 import { Events } from "../enums/event.enum";
-
-const rooms: Record<string, GameRoom> = {};
+import { rooms } from "../state/rooms.state";
 
 export function handleCreateGame(socket: Socket) {
-  socket.on(
-    Events.CreateGame,
-    ({ roomName, password, ...otherData }: GameRoom) => {
-      console.log(`Room ${roomName} created with password ${password}`);
+  socket.on(Events.CreateGame, (data: GameRoom) => {
+    rooms[data.roomName] = data;
 
-      rooms[roomName] = { password, roomName, ...otherData };
-      socket.join(roomName);
-
-      socket.emit("roomCreated", { roomName, password });
-      socket.emit(Events.RoomsListUpdated, Object.keys(rooms));
-    }
-  );
+    socket.join(data.roomName);
+  });
 }
